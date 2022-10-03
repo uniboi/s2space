@@ -68,13 +68,6 @@
 			"ServerCallback": {
 				"After": "CapshipTriggersInit"
 			}
-		},
-		{
-			"Path": "pseudo_trigger_boxes.nut",
-			"RunOn": "SERVER && MP",
-			"ServerCallback": {
-				"After": "PseudoTriggersInit"
-			}
 		}
 	],
 	"Localisation": 
