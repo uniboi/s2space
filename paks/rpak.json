@@ -1,0 +1,9 @@
+{
+        "Aliases":
+        {
+            "mp_s2s.rpak":"sp_s2s.rpak"
+        },
+	"Preload": {
+            "mp_s2s_loadscreen":false
+	}
+}

@@ -1,0 +1,105 @@
+globalize_all_functions
+
+void function HangarLiftPanelsClose( float rotTime )
+{
+	array<entity> panels = GetEntArrayByScriptName( "hangar_lift_cover" )
+	foreach ( panel in panels )
+	{
+		panel.NonPhysicsSetRotateModeLocal( true )
+		vector angles = AnglesCompose( panel.GetLocalAngles(), < 90,0,0> )
+		panel.NonPhysicsRotateTo( angles, rotTime, rotTime * 0.1, rotTime * 0.2 )
+	}
+
+	wait rotTime
+}
+
+void function HangarLiftPanelsOpen( float rotTime )
+{
+	array<entity> panels = GetEntArrayByScriptName( "hangar_lift_cover" )
+	foreach ( panel in panels )
+	{
+		panel.NonPhysicsSetRotateModeLocal( true )
+		vector angles = AnglesCompose( panel.GetLocalAngles(), < -90,0,0> )
+		panel.NonPhysicsRotateTo( angles, rotTime, rotTime * 0.1, rotTime * 0.2 )
+	}
+
+	EmitSoundOnEntity( panels[0], "s2s_hangar_blast_cover_up" )
+
+	wait rotTime
+}
+
+void function HangarLiftLower( float liftTime, float panelDelay, float panelTime )
+{
+	//move the lift
+	entity hangarLiftUp = GetEntByScriptName( "hangarLiftUpPos" )
+	entity hangarLiftDown = GetEntByScriptName( "hangarLiftDownPos" )
+
+	hangarLiftUp.NonPhysicsSetMoveModeLocal( true )
+	hangarLiftUp.NonPhysicsMoveTo( hangarLiftDown.GetLocalOrigin(), liftTime, liftTime * 0.15, liftTime * 0.075 )
+	EmitSoundOnEntity( hangarLiftUp, "s2s_hangar_platform_down" )
+	hangarLiftDown.Destroy()
+
+	// delaythread( liftTime ) FlagSet( "HangarLiftDone" )
+
+	wait panelDelay
+
+	thread HangarLiftPanelsOpen( panelTime )
+}
+
+
+void function DEV_MoveMalta( vector origin )
+{
+	ShipStruct malta = GetMalta()
+
+	ShipFlyToPos( malta, CLVec( origin + malta.mover.GetOrigin() ) )
+}
+
+void function GetMaltaDeltaFromPlayer0()
+{
+	print( GetRelativeDelta( GetPlayerByIndex(0).GetOrigin(), GetMalta().mover ) )
+}
+
+void function SetupMaltaSpawns()
+{
+	// GetEnt( "info_player_start" ).Destroy()
+
+	try
+		entity malta = GetEntByScriptName( "maltaTemplate" )
+	catch( ohno )
+		return
+	
+	// if ( !IsValid( malta ) )
+	// 	return
+	
+	array<vector> offsets = [
+		< -625.761, 955.096, 104.031 >,
+	]
+	foreach( int index, vector offset in offsets )
+	{
+		entity spawnpoint_start = CreateEntity( "info_spawnpoint_human_start" )
+		spawnpoint_start.SetScriptName( spawnpoint_start.GetClassName() + "_" + index )
+		spawnpoint_start.SetOrigin( offset + Malta_Start + <1000,0,0> )
+		spawnpoint_start.SetAngles( <0,90,0> )
+		// malta.LinkToEnt( spawnpoint_start )
+	}
+}
+
+void function WarpInWidowsForMalta()
+{
+
+}
+
+void function SpawnZiplineMalta()
+{
+
+}
+
+void function SetupDropshipsSpawnsOnMalta()
+{
+
+}
+
+void function SpawnDrivableDropShipMalta( entity button, entity player )
+{
+
+}

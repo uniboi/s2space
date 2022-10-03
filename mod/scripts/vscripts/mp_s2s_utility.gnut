@@ -1,0 +1,160 @@
+globalize_all_functions
+
+struct
+{
+    int callsignIndex = 0
+	array<vector> SavedOrigins
+}
+file
+
+string function DropshipGetRandomCallsign()
+{
+	array<string> names = [ "S2S_CALLSIGN_RVAC",
+							"S2S_CALLSIGN_RV21",
+							"S2S_CALLSIGN_RV22",
+							"S2S_CALLSIGN_RV23",
+							"S2S_CALLSIGN_RV24",
+							"S2S_CALLSIGN_RV31",
+							"S2S_CALLSIGN_RV32",
+							"S2S_CALLSIGN_RV33",
+							"S2S_CALLSIGN_RV34",
+							"S2S_CALLSIGN_CRAC",
+							"S2S_CALLSIGN_CR21",
+							"S2S_CALLSIGN_CR22",
+							"S2S_CALLSIGN_CR23",
+							"S2S_CALLSIGN_CR24",
+							"S2S_CALLSIGN_CR31",
+							"S2S_CALLSIGN_CR32",
+							"S2S_CALLSIGN_CR33",
+							"S2S_CALLSIGN_CR34",
+							"S2S_CALLSIGN_VLAC",
+							"S2S_CALLSIGN_VL21",
+							"S2S_CALLSIGN_VL22",
+							"S2S_CALLSIGN_VL23",
+							"S2S_CALLSIGN_VL24",
+							"S2S_CALLSIGN_VL31",
+							"S2S_CALLSIGN_VL32",
+							"S2S_CALLSIGN_VL33",
+							"S2S_CALLSIGN_VL34"   ]
+
+	int index = file.callsignIndex
+	file.callsignIndex++
+	if ( file.callsignIndex >= names.len() )
+		file.callsignIndex = 0
+
+	return names[ index ]
+}
+
+void function Ship_CleanDelete( ShipStruct ship )
+{
+	if ( IsValid( ship.mover ) )
+	{
+		FakeDestroy( ship )
+		if ( IsValid( ship.mover ) )
+			ship.mover.Destroy()
+	}
+}
+
+void function Ship_CleanDeleteWithDelay( ShipStruct ship, float time )
+{
+	wait time
+	Ship_CleanDelete( ship )
+}
+
+void function FakeDestroyWithDelay( ShipStruct ship, float time )
+{
+	wait time
+	FakeDestroy( ship )
+}
+
+void function _WarpInEffects( vector origin, vector angles )
+{
+	EmitSoundAtPosition( TEAM_UNASSIGNED, origin, "dropship_warpin" )
+
+	entity fx = PlayFX( TURBO_WARP_FX, origin, angles + <0,90,0> )
+	fx.FXEnableRenderAlways()
+	fx.DisableHibernation()
+}
+
+ShipStruct function WarpInWidow( LocalVec origin, vector angles = CONVOYDIR )
+{
+	_WarpInEffects( origin.v, angles )
+
+	ShipStruct widow = SpawnWidow( origin, angles )
+	ClearShipBehavior( widow, eBehavior.ENEMY_ONBOARD )
+
+	widow.model.Anim_DisableUpdatePosition()
+	widow.model.Anim_DisableAnimDelta()
+	widow.model.SetInvulnerable()
+	widow.triggerFallingDeath.Disable()
+
+	int fxID = GetParticleSystemIndex( FX_DECK_FLAP_WIND )
+	array<entity> fxNodes = GetEntArrayByScriptName( "startP_widow_windfx" )
+	foreach ( anchor in fxNodes )
+	{
+		int attachID = anchor.LookupAttachment( "REF" )
+		StartParticleEffectOnEntity( anchor, fxID, FX_PATTACH_POINT_FOLLOW, attachID )
+	}
+
+	return widow
+}
+
+ShipStruct function WarpInGoblinLight( LocalVec origin, vector angles = CONVOYDIR, bool animating = false )
+{
+	if ( IsValid( origin ) )
+		_WarpInEffects( LocalToWorldOrigin( origin ), angles )
+
+	return SpawnGoblinLight( origin, angles, animating )
+}
+
+ShipStruct function WarpInCrowLight( LocalVec origin, vector angles = CONVOYDIR, bool animating = false )
+{
+	if ( IsValid( origin ) )
+		_WarpInEffects( LocalToWorldOrigin( origin ), angles )
+
+	return SpawnCrowLight( origin, angles, animating )
+}
+
+void function WarpOutShipFake( ShipStruct ship )
+{
+	ship.mover.NonPhysicsMoveTo( ship.mover.GetOrigin() + <0,100000,0>, 2, 0.5, 0 )
+	thread FakeDestroyWithDelay( ship, 1 )
+
+	entity fx = PlayFX( FX_GUNSHIP_CRASH_EXPLOSION_EXIT, ship.mover.GetOrigin(), ship.mover.GetAngles() )
+	fx.FXEnableRenderAlways()
+	fx.DisableHibernation()
+
+	EmitSoundOnEntity( ship.model, "dropship_warpout" )
+}
+
+void function WarpOutShip( ShipStruct ship )
+{
+	ship.mover.NonPhysicsMoveTo( ship.mover.GetOrigin() + <0,100000,0>, 2, 0.5, 0 )
+	thread Ship_CleanDeleteWithDelay( ship, 1 )
+
+	entity fx = PlayFX( FX_GUNSHIP_CRASH_EXPLOSION_EXIT, ship.mover.GetOrigin(), ship.mover.GetAngles() )
+	fx.FXEnableRenderAlways()
+	fx.DisableHibernation()
+
+	EmitSoundOnEntity( ship.model, "dropship_warpout" )
+}
+
+void function SavePos()
+{
+	file.SavedOrigins.append( GetPlayerByIndex(0).GetOrigin() )
+}
+
+void function SaveDeltaMalta()
+{
+	file.SavedOrigins.append( GetRelativeDelta( GetPlayerByIndex(0).GetOrigin(), GetMalta().mover ) )
+}
+
+void function SaveDeltaGibraltar()
+{
+	file.SavedOrigins.append( GetRelativeDelta( GetPlayerByIndex(0).GetOrigin(), GetGibraltar().mover ) )
+}
+
+void function SpawnProp( asset model )
+{
+	CreatePropDynamic( model, GetPlayerByIndex(0).GetOrigin() )
+}

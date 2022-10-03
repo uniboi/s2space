@@ -1,0 +1,33 @@
+global function InitMpS2s
+
+#if SERVER
+#else // CLIENT
+global function Server_SetupMapVisuals
+#endif
+
+void function InitMpS2s()
+{
+	#if SERVER
+    AddCallBack_OnSpecificMapLoaded( "mp_s2s", MpS2s )
+	AddCallback_OnClientConnected( OnPlayerConnected )
+	#else // CLIENT
+	#endif
+	AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars_s2s )
+}
+
+void function RegisterNetworkVars_s2s()
+{
+	Remote_RegisterFunction( "Server_SetupMapVisuals" )
+}
+
+#if SERVER
+void function OnPlayerConnected( entity player )
+{
+	Remote_CallFunction_NonReplay( player, "Server_SetupMapVisuals" )
+}
+#else // CLIENT
+void function Server_SetupMapVisuals()
+{
+	SetMapSetting_FogEnabled(false)
+}
+#endif

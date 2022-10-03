@@ -1,0 +1,84 @@
+{
+	"Name" : "Odd.mp_s2s_stripped",
+	"Description": "MOSTLY self contained s2s mod. DOES NOT depend on cor's s2s. DOES DEPEND on cor's utilities",
+	"Version": "0.0.1",
+	"LoadPriority": 3,
+	"RequiredOnClient": true,
+	"Dependencies": {
+		"HAS_QUERSCHNITT": "Querschnitt"
+	},
+	"ConVars": [
+        {
+            "Name":"s2s_strip_debug",
+            "DefaultValue": "0",
+            "Flags": 16777216
+        }
+	],
+	"Scripts": [
+		{
+			"Path": "lobby/sh_private_lobby_mp_s2s.gnut",
+			"RunOn": "( CLIENT || SERVER ) && MP",
+			"ClientCallback": {
+				"Before": "PrivateLobbyAddMpS2sMap"
+			},
+			"ServerCallback": {
+				"Before": "PrivateLobbyAddMpS2sMap"
+			}
+		},
+		{
+			"Path": "weapons/sp_weapon_swarm_rockets_s2s.nut",
+			"RunOn": "( CLIENT || SERVER ) && MP",
+			"ServerCallback": {
+				"Before": "SPWeaponSwarmRockets_S2S_Init"
+			}
+		},
+		{
+			"Path": "malta.gnut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "gibraltar.gnut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "mp_s2s_utility.gnut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "_custom_spawn.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "init_mp_s2s.gnut",
+			"RunOn": "( SERVER || CLIENT ) && MP",
+			"ServerCallback": {
+				"Before": "InitMpS2s"
+			},
+			"ClientCallback": {
+				"Before": "InitMpS2s"
+			}
+		},
+		{
+			"Path": "mp_s2s.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "capship_triggers.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "CapshipTriggersInit"
+			}
+		},
+		{
+			"Path": "pseudo_trigger_boxes.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "PseudoTriggersInit"
+			}
+		}
+	],
+	"Localisation": 
+	[
+		"resource/mp_s2s_localisation_%language%.txt"
+	]
+}

@@ -1,0 +1,26 @@
+globalize_all_functions
+
+void function GetGibraltarDeltaFromPlayer0()
+{
+	print( GetRelativeDelta( GetPlayerByIndex(0).GetOrigin(), GetGibraltar().mover ) )
+}
+
+void function SetupGibraltarSpawns()
+{
+
+}
+
+void function WarpInWidowsForGibraltar()
+{
+
+}
+
+void function SetupDropshipsSpawnsOnGibraltar()
+{
+
+}
+
+void function SpawnDrivableDropShipGibraltar( entity button, entity player )
+{
+
+}

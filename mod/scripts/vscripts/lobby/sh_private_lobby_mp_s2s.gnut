@@ -1,0 +1,13 @@
+global function PrivateLobbyAddMpS2sMap
+
+void function PrivateLobbyAddMpS2sMap()
+{
+	AddCallback_OnCustomGamemodesInit( AddMapToPrivateMatchWhenReady )
+}
+
+void function AddMapToPrivateMatchWhenReady()
+{
+	AddPrivateMatchMode( "dogs" )
+
+	AddPrivateMatchMap( "mp_s2s" )
+}
