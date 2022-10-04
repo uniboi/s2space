@@ -33,12 +33,6 @@ jobs:
             echo "::error::Version in mod.json does not match tag version"
             exit 1
           fi
-  # concatenation:
-  #   runs-on: ubuntu-latest
-  #   needs: verify
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - name: concatenate and extract assets
 
   publish:
     runs-on: ubuntu-latest
@@ -75,3 +69,5 @@ jobs:
           # Directory to wrap the contents of the repo in
           wrap: mods/${{ github.repository_owner }}.${{ env.name }} # This will wrap your Author.ModName folder in a mods/ folder before publishing
           dev: true
+      - run: |
+          mv ${{ github.workspace }}/mods/${{ github.repository_owner }}.${{ env.name }}/README.md ./
