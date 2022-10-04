@@ -45,17 +45,18 @@ jobs:
     needs: verify
     steps:
       - name: Get clean version # Duplicating code is cool, actually
-      - uses: actions/checkout@v3
         run: |
-          cat ${{ github.workspace }}/compressed/assets.tar.gz.* > ${{ github.workspace }}/compressed/assets.tar.gz
-          tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
-          rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
           if [[ ${{ inputs.version }} ]]; then
             echo cleanVersion=$(echo ${{ inputs.version }}) >> $GITHUB_ENV
           fi
           # if [[ ${{ !inputs.version }} ]]; then
           #   echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
           # fi
+      - uses: actions/checkout@v3
+      - run: |
+          cat ${{ github.workspace }}/compressed/assets.tar.gz.* > ${{ github.workspace }}/compressed/assets.tar.gz
+          tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
+          rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
       - name: Upload Thunderstore Package
         uses: GreenTF/upload-thunderstore-package@v1
         with:
