@@ -1,0 +1,56 @@
+name: Publish package
+
+on:
+  release:
+    types: [published] # run when a new release is published
+    
+env:
+  name: ${{github.event.repository.name}} # Edit this if the package name differs from the repo name
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Get clean version
+        run: |
+          echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
+      - name: Check that version matches
+        run: |
+          if [[ "$(grep -Po "\d+\.\d+\.\d+" $(find ./ -name mod.json))" != "${{ env.cleanVersion }}" ]]; then
+            echo "::debug::${{env.cleanVersion}}"
+            echo "::debug::$(cat $(find ./ -name mod.json ))"
+            echo "::error::Version in mod.json does not match tag version"
+            exit 1
+          fi
+  publish:
+    runs-on: ubuntu-latest
+    needs: verify
+    steps:
+      - run: |
+          tar cvzf - vpk/client_mp_s2s.bsp.pak000_000.vpk vpk/englishclient_mp_s2s.bsp.pak000_dir.vpk mod/maps/mp_s2s.bsp | split --bytes=90MB - compressed/assets.tar.gz.
+          tar -xvf compressed/assets.tar.gz
+          rm -f compressed/assets.tar.gz*
+    steps:
+      - name: Get clean version # Duplicating code is cool, actually
+        run: |
+          echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
+      - uses: actions/checkout@v3
+      - name: Upload Thunderstore Package
+        uses: GreenTF/upload-thunderstore-package@v1
+        with:
+          community: northstar
+          # Name of the team to publish the mod under
+          # This should be modified if your github username is different than your team name on Thunderstore
+          namespace: odds # <------ DOUBLE CHECK THIS
+          # Name of the package
+          name: Spaceships # This can be modified if the package name differs from the repo name
+          # Package version to publish
+          version: ${{ env.cleanVersion }} # This is the tag that was created in the release but without the leading 'v'
+          # Description of the mod
+          description: Framework that adds controllable spaceships
+          # Thunderstore API token
+          token: ${{ secrets.TS_KEY }} 
+          # Directory to wrap the contents of the repo in
+          wrap: mods/${{ github.repository_owner }}.${{ env.name }} # This will wrap your Author.ModName folder in a mods/ folder before publishing
+          dev: true
