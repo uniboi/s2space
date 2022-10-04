@@ -52,7 +52,7 @@ jobs:
           tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
           rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
       - name: Upload Thunderstore Package
-        uses: GreenTF/upload-thunderstore-package@v1
+        uses:  GreenTF/upload-thunderstore-package@v2.2
         with:
           community: northstar
           # Name of the team to publish the mod under
@@ -69,5 +69,3 @@ jobs:
           # Directory to wrap the contents of the repo in
           wrap: mods/${{ github.repository_owner }}.${{ env.name }} # This will wrap your Author.ModName folder in a mods/ folder before publishing
           dev: true
-      - run: |
-          mv ${{ github.workspace }}/mods/${{ github.repository_owner }}.${{ env.name }}/README.md ./
