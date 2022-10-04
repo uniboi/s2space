@@ -2,9 +2,7 @@ name: Publish package
 
 on:
   release:
-    types: [published] # run when a new release is published
-  workflow_dispatch:
-    types: [published]
+    types: [published, workflow_dispatch] # run when a new release is published
     
 env:
   name: ${{github.event.repository.name}} # Edit this if the package name differs from the repo name
