@@ -39,9 +39,9 @@ jobs:
     steps:
       - name: concatenate and extract assets
         run: |
-          tar cvzf - vpk/client_mp_s2s.bsp.pak000_000.vpk vpk/englishclient_mp_s2s.bsp.pak000_dir.vpk mod/maps/mp_s2s.bsp | split --bytes=90MB - compressed/assets.tar.gz.
-          tar -xvf compressed/assets.tar.gz
-          rm -f compressed/assets.tar.gz*
+          cat /github/workspace/compressed/assets.tar.gz.* > /github/workspace/compressed/assets.tar.gz
+          tar -xvf /github/workspace/compressed/assets.tar.gz
+          rm -f /github/workspace/compressed/assets.tar.gz*
   publish:
     runs-on: ubuntu-latest
     needs: concatenation
