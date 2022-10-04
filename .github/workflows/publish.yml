@@ -52,9 +52,9 @@ jobs:
           if [[ ${{ inputs.version }} ]]; then
             echo cleanVersion=$(echo ${{ inputs.version }}) >> $GITHUB_ENV
           fi
-          if [[ ${{ !inputs.version }} ]]; then
-            echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
-          fi
+          # if [[ ${{ !inputs.version }} ]]; then
+          #   echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
+          # fi
       - uses: actions/checkout@v3
       - name: Upload Thunderstore Package
         uses: GreenTF/upload-thunderstore-package@v1
