@@ -50,7 +50,7 @@ jobs:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
           if [[ ${{ inputs.version }} ]]; then
-            echo cleanVersion=$(${{ inputs.version }}) >> $GITHUB_ENV
+            echo cleanVersion=$(echo ${{ inputs.version }}) >> $GITHUB_ENV
           fi
           if [[ ${{ !inputs.version }} ]]; then
             echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
