@@ -39,9 +39,9 @@ jobs:
     steps:
       - name: concatenate and extract assets
         run: |
-          cat /github/workspace/compressed/assets.tar.gz.* > /github/workspace/compressed/assets.tar.gz
-          tar -xvf /github/workspace/compressed/assets.tar.gz
-          rm -f /github/workspace/compressed/assets.tar.gz*
+          cat ${{ github.workspace }}/compressed/assets.tar.gz.* > ${{ github.workspace }}/compressed/assets.tar.gz
+          tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
+          rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
   publish:
     runs-on: ubuntu-latest
     needs: concatenation
