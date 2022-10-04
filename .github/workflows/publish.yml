@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
-          if [[ ${{ VERSION }} ]]; then
+          if [[ ${{ inputs.version }} ]]; then
             echo cleanVersion=$(${{ inputs.version }}) >> $GITHUB_ENV
             exit 0
           fi
