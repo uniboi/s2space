@@ -4,11 +4,12 @@ on:
   release:
     types: [published] # run when a new release is published
   workflow_dispatch:
-    version:
-      description: 'version to be used instead of a detected release'
-      default: ''
-      type: string
-      required: true
+    inputs:
+      version:
+        description: 'version to be used instead of a detected release'
+        default: ''
+        type: string
+        required: true
 
 env:
   name: ${{github.event.repository.name}} # Edit this if the package name differs from the repo name
