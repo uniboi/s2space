@@ -33,22 +33,22 @@ jobs:
             echo "::error::Version in mod.json does not match tag version"
             exit 1
           fi
-  concatenation:
-    runs-on: ubuntu-latest
-    needs: verify
-    steps:
-      - uses: actions/checkout@v3
-      - name: concatenate and extract assets
-        run: |
-          cat ${{ github.workspace }}/compressed/assets.tar.gz.* > ${{ github.workspace }}/compressed/assets.tar.gz
-          tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
-          rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
+  # concatenation:
+  #   runs-on: ubuntu-latest
+  #   needs: verify
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: concatenate and extract assets
+
   publish:
     runs-on: ubuntu-latest
     needs: concatenation
     steps:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
+          cat ${{ github.workspace }}/compressed/assets.tar.gz.* > ${{ github.workspace }}/compressed/assets.tar.gz
+          tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
+          rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
           if [[ ${{ inputs.version }} ]]; then
             echo cleanVersion=$(echo ${{ inputs.version }}) >> $GITHUB_ENV
           fi
