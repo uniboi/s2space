@@ -34,7 +34,7 @@ jobs:
           rm -f compressed/assets.tar.gz*
   publish:
     runs-on: ubuntu-latest
-    needs: verify
+    needs: concatenation
     steps:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
