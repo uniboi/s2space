@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
     version:
       description: 'version to be used instead of a detected release'
+      default: ''
       type: string
       required: true
 
