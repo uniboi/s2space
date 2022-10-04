@@ -22,7 +22,7 @@ jobs:
           echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
       - name: Check that version matches
         run: |
-          if [[ ${{ VERSION }} ]]; then
+          if [[ ${{ inputs.version }} ]]; then
             exit 0
           fi
           if [[ "$(grep -Po "\d+\.\d+\.\d+" $(find ./ -name mod.json))" != "${{ env.cleanVersion }}" ]]; then
@@ -47,7 +47,7 @@ jobs:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
           if [[ ${{ VERSION }} ]]; then
-            echo cleanVersion=$(echo ${{ VERSION }}) >> $GITHUB_ENV
+            echo cleanVersion=$(${{ inputs.version }}) >> $GITHUB_ENV
             exit 0
           fi
           echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
