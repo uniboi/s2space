@@ -52,7 +52,7 @@ jobs:
           tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz
           rm -f ${{ github.workspace }}/compressed/assets.tar.gz*
       - name: Upload Thunderstore Package
-        uses:  GreenTF/upload-thunderstore-package
+        uses:  GreenTF/upload-thunderstore-package@latest
         with:
           community: northstar
           # Name of the team to publish the mod under
