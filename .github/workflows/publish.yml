@@ -56,7 +56,7 @@ jobs:
           tar -xvf ${{ github.workspace }}/compressed/assets.tar.gz # extract concatinated assets
           rm -f ${{ github.workspace }}/compressed/assets.tar.gz* # delete assets
       - name: Upload Thunderstore Package
-        uses:  GreenTF/upload-thunderstore-package@2.2
+        uses:  GreenTF/upload-thunderstore-package@v2.2
         with:
           community: northstar
           # Name of the team to publish the mod under
