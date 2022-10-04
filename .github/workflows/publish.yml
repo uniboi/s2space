@@ -4,7 +4,11 @@ on:
   release:
     types: [published] # run when a new release is published
   workflow_dispatch:
-  
+    version:
+      description: 'version to be used instead of a detected release'
+      type: string
+      required: true
+
 env:
   name: ${{github.event.repository.name}} # Edit this if the package name differs from the repo name
 
@@ -18,6 +22,9 @@ jobs:
           echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
       - name: Check that version matches
         run: |
+          if [[ ${{ VERSION }} ]]; then
+            exit 0
+          fi
           if [[ "$(grep -Po "\d+\.\d+\.\d+" $(find ./ -name mod.json))" != "${{ env.cleanVersion }}" ]]; then
             echo "::debug::${{env.cleanVersion}}"
             echo "::debug::$(cat $(find ./ -name mod.json ))"
@@ -39,6 +46,10 @@ jobs:
     steps:
       - name: Get clean version # Duplicating code is cool, actually
         run: |
+          if [[ ${{ VERSION }} ]]; then
+            echo cleanVersion=$(echo ${{ VERSION }}) >> $GITHUB_ENV
+            exit 0
+          fi
           echo cleanVersion=$(echo ${{github.ref_name}} | sed s/v//g) >> $GITHUB_ENV
       - uses: actions/checkout@v3
       - name: Upload Thunderstore Package
