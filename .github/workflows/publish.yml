@@ -14,7 +14,7 @@ on:
         description: 'dependency strings'
         type: string
         default: ''
-        required: true
+        required: false
       dev:
         description: 'push to dev'
         default: true
