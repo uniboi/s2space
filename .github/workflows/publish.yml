@@ -73,4 +73,4 @@ jobs:
           # Directory to wrap the contents of the repo in
           wrap: mods/${{ github.repository_owner }}.${{ env.name }} # This will wrap your Author.ModName folder in a mods/ folder before publishing
           dev: ${{ github.event_name == 'workflow_dispatch' && inputs.dev }}
-          dep: 'cat_or_not-cat_or_not_utils@1.2.4'
+          deps: 'cat_or_not-cat_or_not_utils@1.2.4'
