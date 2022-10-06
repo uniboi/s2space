@@ -10,8 +10,7 @@
 	"ConVars": [
         {
             "Name":"s2s_strip_debug",
-            "DefaultValue": "0",
-            "Flags": 16777216
+            "DefaultValue": "0"
         }
 	],
 	"Scripts": [
