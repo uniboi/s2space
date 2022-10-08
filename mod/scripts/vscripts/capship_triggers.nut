@@ -61,7 +61,9 @@ void function SetupCapshipTriggers()
     // entity maltaLiftsAngled = GetEntByScriptName( "maltaLiftsAngled" )
     entity maltaLifts = GetEntByScriptName( "maltaLifts" )
     entity maltaGunDeck02Top = GetEntByScriptName( "maltaGunDeck02Top" )
-    file.maltaTriggers = [ maltaHangarLarge, maltaHangarAngled, maltaGunDeck03Front, maltaGunDeck03West, maltaGunDeck03East, maltaGunDeck03Closing, maltaGunDeck03Connecting, maltaGunDeck02Connecting, maltaGunDeck02East, maltaGunDeck02Front, maltaGunDeck01Front, maltaGunDeck01East, maltaGunDeck01Conclusion, /*maltaLiftsAngled,*/ maltaLifts, maltaGunDeck02Top ]
+    entity maltaGunDeck01EastFiller = GetEntByScriptName( "maltaGunDeck01EastAngleFiller" )
+    entity maltaGunDeck01EastFillerTop = GetEntByScriptName( "maltaGunDeck01EastAngleTopFiller" )
+    file.maltaTriggers = [ maltaHangarLarge, maltaHangarAngled, maltaGunDeck03Front, maltaGunDeck03West, maltaGunDeck03East, maltaGunDeck03Closing, maltaGunDeck03Connecting, maltaGunDeck02Connecting, maltaGunDeck02East, maltaGunDeck02Front, maltaGunDeck01Front, maltaGunDeck01East, maltaGunDeck01Conclusion, /*maltaLiftsAngled,*/ maltaLifts, maltaGunDeck02Top, maltaGunDeck01EastFiller, maltaGunDeck01EastFillerTop ]
 
     foreach( entity trigger in file.maltaTriggers )
         thread TriggerCheck( trigger )
@@ -82,6 +84,8 @@ void function SetupCapshipTriggers()
     // file.take0GOnExit[ maltaLiftsAngled ] <- malta_gundeck01_east_exit
     file.take0GOnExit[ maltaLifts ] <- malta_lifts_exit
     file.take0GOnExit[ maltaGunDeck02Top ] <- malta_gundeck02_top_exit
+    file.take0GOnExit[ maltaGunDeck01EastFiller ] <- malta_gundeck01_east_filler_exit
+    file.take0GOnExit[ maltaGunDeck01EastFillerTop ] <- malta_gundeck01_east_exit
 
     if( GetConVarBool( "s2s_strip_debug" ) )
     {
@@ -183,7 +187,14 @@ bool function malta_gundeck01_east_exit( entity trigger, entity activator )
 {
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
-    return org.y >= corners[7].y && org.x <= corners[0].x && org.y >= corners[1].y && org.z > corners[0].z && org.z < corners[4].z && !GetEntByScriptName( "maltaLifts" ).IsTouching( activator )
+    return org.y >= corners[7].y && org.x <= corners[0].x && org.y >= corners[1].y && org.z > corners[0].z && org.z < corners[4].z
+}
+
+bool function malta_gundeck01_east_filler_exit( entity trigger, entity activator )
+{
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    return ((org.y >= corners[7].y && org.x <= corners[0].x && org.y >= corners[1].y) || org.x <= corners[2].x) && org.z > corners[0].z && org.z < corners[4].z && !GetEntByScriptName( "maltaLifts" ).IsTouching( activator )
 }
 
 bool function malta_gundeck01_conclusion_exit( entity trigger, entity activator )
