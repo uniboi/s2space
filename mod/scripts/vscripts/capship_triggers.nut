@@ -39,6 +39,7 @@ void function DrawPersistentTriggers()
 
 void function CapshipTriggersInit()
 {
+    // AddCallBack_OnSpecificMapLoaded( "mp_s2s", SetupCapshipTriggers )
     AddCallback_GameStateEnter( eGameState.Playing, SetupCapshipTriggers )
     AddCallback_OnClientConnecting( PlayerConnectRegister )
 }
@@ -78,7 +79,7 @@ void function SetupCapshipTriggers()
     foreach( entity trigger in file.maltaTriggers )
         thread TriggerCheck( trigger )
 
-    file.take0GOnExit[ maltaHangarLarge ] <- malta_hangar_large_exit
+    file.take0GOnExit[ maltaHangarLarge ] <- trigger_local_south_exit
     file.take0GOnExit[ maltaHangarAngled ] <- malta_hangar_angled_exit
     file.take0GOnExit[ maltaGunDeck03Front ] <- malta_gundeck03_front_exit
     file.take0GOnExit[ maltaGunDeck03West ] <- malta_gundeck03_west_exit
@@ -90,8 +91,7 @@ void function SetupCapshipTriggers()
     file.take0GOnExit[ maltaGunDeck02Front ] <- malta_gundeck03_front_exit
     file.take0GOnExit[ maltaGunDeck01Front ] <- malta_gundeck03_front_exit
     file.take0GOnExit[ maltaGunDeck01East ] <- malta_gundeck01_east_exit
-    file.take0GOnExit[ maltaGunDeck01Conclusion ] <- malta_gundeck01_conclusion_exit
-    // file.take0GOnExit[ maltaLiftsAngled ] <- malta_gundeck01_east_exit
+    file.take0GOnExit[ maltaGunDeck01Conclusion ] <- trigger_local_west_exit
     file.take0GOnExit[ maltaLifts ] <- malta_lifts_exit
     file.take0GOnExit[ maltaGunDeck02Top ] <- malta_gundeck02_top_exit
     file.take0GOnExit[ maltaGunDeck01EastFiller ] <- malta_gundeck01_east_filler_exit
@@ -135,11 +135,6 @@ void function Take0G( entity player )
 ////////////////////////////////////////
 //// TRIGGER EXIT CONTROL FUNCTIONS ////
 ////////////////////////////////////////
-
-bool function malta_hangar_large_exit( entity trigger, entity activator )
-{
-    return activator.GetOrigin().x <= (trigger.GetOrigin() + trigger.GetBoundingMins()).x 
-}
 
 bool function malta_hangar_angled_exit( entity trigger, entity activator )
 {
@@ -208,13 +203,6 @@ bool function malta_gundeck01_east_filler_exit( entity trigger, entity activator
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     return ((org.y >= corners[7].y && org.x <= corners[0].x && org.y >= corners[1].y) || org.x <= corners[2].x) && org.z > corners[0].z && org.z < corners[4].z && !GetEntByScriptName( "maltaLifts" ).IsTouching( activator )
-}
-
-bool function malta_gundeck01_conclusion_exit( entity trigger, entity activator )
-{
-    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
-    vector org = activator.GetOrigin()
-    return org.y >= corners[0].y && org.z >= corners[0].z && org.z <= corners[4].z
 }
 
 bool function malta_lifts_exit( entity trigger, entity activator )
@@ -293,7 +281,7 @@ bool function trigger_local_west_exit( entity trigger, entity activator )
     
     vector planeNormal = Normalize( CrossProduct( corners[3] - corners[0], corners[3] - corners[7] ) )
     vector rayDirection = center - org
-    vector collision = LinePlaneCollision( planeNormal, corners[2], rayDirection, center )
+    vector collision = LinePlaneCollision( planeNormal, corners[3], rayDirection, center )
 
     #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
