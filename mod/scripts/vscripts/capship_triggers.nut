@@ -285,60 +285,21 @@ bool function trigger_local_south_exit( entity trigger, entity activator )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
 
-    vector c2n = Normalize( corners[2] - center )
-    vector c3n = Normalize( corners[3] - center )
-    vector c6n = Normalize( corners[6] - center )
-    vector c7n = Normalize( corners[7] - center )
-
-    vector cp = Normalize( center - org )
-
     DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
-
-    // DrawGlobal( "line", center, corners[2], 184, 101, 237, true, 5.0 )
-    // DrawGlobal( "line", center, corners[3], 184, 101, 237, true, 5.0 )
-    // DrawGlobal( "line", center, corners[6], 184, 101, 237, true, 5.0 )
-    // DrawGlobal( "line", center, corners[7], 184, 101, 237, true, 5.0 )
-
-    // DrawGlobal( "line", corners[2], org, 0, 255, 0, true, 5.0 )
-    // DrawGlobal( "line", corners[3], org, 0, 255, 0, true, 5.0 )
-    // DrawGlobal( "line", corners[6], org, 0, 255, 0, true, 5.0 )
-    // DrawGlobal( "line", corners[7], org, 0, 255, 0, true, 5.0 )
-
-    printt( "corner 2 (bottom right)  " + c2n,
-            "corner 3 (bottom left)   " + c3n,
-            "corner 6 (top right)     " + c6n,
-            "corner 7 (top left)      " + c7n,
-            "center -> player         " + cp )
-
-    // return GetLocalFaceExitDirection( Normalize( trigger.GetWorldSpaceCenter() - activator.GetOrigin() ) ) == <(-1),0,0>
-
-    printt( cp.y >= c2n.y, cp.y <= c3n.y, cp.z >= c2n.z, cp.z <= c6n.z )
-
     
-    // plane stuff
-
-    vector c3_c2 = corners[3] - corners[2]
-    vector c3_c7 = corners[3] - corners[7]
-    vector planeNormal = Normalize( CrossProduct( c3_c2, c3_c7 ) )
-    printt( c3_c2, c3_c7, planeNormal )
+    vector planeNormal = Normalize( CrossProduct( corners[3] - corners[2], corners[3] - corners[7] ) )
     vector rayDirection = center - org
-
     vector collision = LinePlaneCollision( planeNormal, corners[3], rayDirection, center )
+
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
-    printt( collision, trigger.GetAngles() )
 
     vector center_collision = center - collision
     vector center_origin = center - org
     vector center_corner0 = center - corners[3]
     vector collision_origin = collision - org
-    printt( Normalize( center_collision ), Normalize( center_origin ), "0 and 1 are equal: " + (Normalize( center_origin ) == Normalize( center_collision )),
-        LengthSqr( center_collision ), LengthSqr( center_origin ), "center -> collision smaller than center -> origin: " + (LengthSqr( center_collision ) < LengthSqr( center_origin )), "center -> collision smaller than center -> lc3: " + (LengthSqr( center_collision ) < LengthSqr( center_corner0 )) )
+    float ccl = LengthSqr( center_collision )
 
-    return LengthSqr( center_collision ) < LengthSqr( center_origin ) && LengthSqr( center_collision ) < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < LengthSqr( center_collision )
-
-    // eop
-
-    // return cp.y >= c2n.y && cp.y <= c3n.y && cp.z >= c2n.z && cp.z <= c6n.z
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
 }
 
 bool function trigger_local_top_exit( entity trigger, entity activator )
