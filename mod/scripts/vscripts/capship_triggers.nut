@@ -4,6 +4,7 @@ global function Take0G
 global function GetAngledBoxCorners
 global function GetEntityCorners
 global function LinePlaneCollision
+global function GetChildren
 global table<entity, bool> is0G
 
 struct {
@@ -15,27 +16,21 @@ struct {
     vector lastActicatorPos
 } file
 
-void function DrawPersistentTriggers()
+#if HAS_QUERSCHNITT
+void function DrawPersistentTriggers( array<entity> triggers )
 {
-    #if HAS_QUERSCHNITT
-    printt( "[s2s] Querschnitt is not enabled. Debug triggers will only draw on the hosting client." )
-    #endif
-
     while( 1 )
     {
-        foreach( entity ent in file.maltaTriggers )
+        foreach( entity ent in triggers )
         {
-            #if HAS_QUERSCHNITT
-                vector[8] corners = GetEntityCorners( ent )
-                DrawGlobal( "rotatedbox", ent.GetOrigin(), ent.GetBoundingMins(), ent.GetBoundingMaxs(), ent.GetAngles(), 0, 255, 255, true, 0.1 )
-                DrawGlobal( "line", corners[0], corners[5], 255, 255, 0, true, 0.1 )
-            #else
-                DebugDrawRotatedBox( ent.GetOrigin(), ent.GetBoundingMind(), ent.GetBoundingMaxs(), ent.GetAngles(), 0, 255, 255, true, 0.1 )
-            #endif
+            vector[8] corners = GetEntityCorners( ent )
+            DrawGlobal( "rotatedbox", ent.GetOrigin(), ent.GetBoundingMins(), ent.GetBoundingMaxs(), ent.GetAngles(), 0, 255, 255, true, 0.1 )
+            DrawGlobal( "line", corners[0], corners[5], 255, 255, 0, true, 0.1 )
         }
         WaitFrame()
     }
 }
+#endif
 
 void function CapshipTriggersInit()
 {
@@ -53,70 +48,50 @@ void function PlayerConnectRegister( entity player )
 void function SetupCapshipTriggers()
 {
     // todo: iwas besseres ausdenken
-    entity maltaHangarLarge = GetEntByScriptName( "maltaTriggerHangar" )
-    entity maltaHangarAngled = GetEntByScriptName( "maltaTriggerAngledHangar" )
-    entity maltaGunDeck03Front = GetEntByScriptName( "maltaGunDeck03Front" )
-    entity maltaGunDeck03West = GetEntByScriptName( "maltaGunDeck03WestAngle" )
-    entity maltaGunDeck03East = GetEntByScriptName( "maltaGunDeck03EastAngle" )
-    entity maltaGunDeck03Closing = GetEntByScriptName( "maltaGunDeck03Closing" )
-    entity maltaGunDeck03Connecting = GetEntByScriptName( "maltaGunDeck03Connection" )
-    entity maltaGunDeck02Connecting = GetEntByScriptName( "maltaGunDeck02Connection" )
-    entity maltaGunDeck02East = GetEntByScriptName( "maltaGunDeck02EastAngle" )
-    entity maltaGunDeck02Front = GetEntByScriptName( "maltaGunDeck02Front" )
-    entity maltaGunDeck01Front = GetEntByScriptName( "maltaGunDeck01Front" )
-    entity maltaGunDeck01East = GetEntByScriptName( "maltaGunDeck01EastAngle" )
-    entity maltaGunDeck01Conclusion = GetEntByScriptName( "maltaGunDeck01Conclusion" )
-    // entity maltaLiftsAngled = GetEntByScriptName( "maltaLiftsAngled" )
-    entity maltaLifts = GetEntByScriptName( "maltaLifts" )
-    entity maltaGunDeck02Top = GetEntByScriptName( "maltaGunDeck02Top" )
-    entity maltaGunDeck01EastFiller = GetEntByScriptName( "maltaGunDeck01EastAngleFiller" )
-    entity maltaGunDeck01EastFillerTop = GetEntByScriptName( "maltaGunDeck01EastAngleTopFiller" )
-    entity maltaLowerDeckLong = GetEntByScriptName( "maltaLowerDeck" )
-    entity maltaLowerDeckEastAngle = GetEntByScriptName( "maltaLowerDeckEastAngle" )
-    entity maltaLowerDeckWestAngle = GetEntByScriptName( "maltaLowerDeckWestAngle" )
-    file.maltaTriggers = [ maltaHangarLarge, maltaHangarAngled, maltaGunDeck03Front, maltaGunDeck03West, maltaGunDeck03East, maltaGunDeck03Closing, maltaGunDeck03Connecting, maltaGunDeck02Connecting, maltaGunDeck02East, maltaGunDeck02Front, maltaGunDeck01Front, maltaGunDeck01East, maltaGunDeck01Conclusion, /*maltaLiftsAngled,*/ maltaLifts, maltaGunDeck02Top, maltaGunDeck01EastFiller, maltaGunDeck01EastFillerTop, maltaLowerDeckLong, maltaLowerDeckEastAngle, maltaLowerDeckWestAngle ]
+    table<string, bool functionref(entity, entity)> maltaExits = {
+        maltaLowerDeckWestAngle = trigger_local_south_exit
+        maltaLowerDeckEastAngle = trigger_local_south_exit
+        maltaLowerDeck = trigger_local_south_exit
+        maltaGunDeck01EastAngleTopFiller = malta_gundeck01_east_exit
+        maltaGunDeck01EastAngleFiller = malta_gundeck01_east_filler_exit
+        maltaLifts = malta_lifts_exit
+        maltaGunDeck01Conclusion = trigger_local_west_exit
+        maltaGunDeck01EastAngle = malta_gundeck01_east_exit
+        maltaGunDeck03Connection = malta_gundeck03_connection_exit
+        maltaGunDeck02Connection = malta_gundeck03_connection_exit
+        maltaGunDeck02EastAngle = malta_gundeck02_east_exit
+        maltaGunDeck02Front = malta_gundeck03_front_exit
+        maltaGunDeck01Front = malta_gundeck03_front_exit
+        maltaTriggerAngledHangar = malta_hangar_angled_exit
+        maltaGunDeck03Front = malta_gundeck03_front_exit
+        maltaGunDeck03WestAngle = malta_gundeck03_west_exit
+        maltaGunDeck03EastAngle = malta_gundeck03_east_exit
+        maltaGunDeck03Closing = trigger_local_east_exit
+        maltaTriggerHangar = trigger_local_south_exit
+        maltaGunDeck02Top = malta_gundeck02_top_exit
+    }
 
-    entity gibraltarHeck = GetEntByScriptName( "gibraltar_heck" )
-    entity gibraltarAirlock = GetEntByScriptName( "gibraltar_airlock" )
-    entity gibraltarBug = GetEntByScriptName( "gibraltar_bug" )
-    entity gibraltarHangar = GetEntByScriptName( "gibraltar_hangar" )
-    file.gibraltarTriggers = [ gibraltarHeck, gibraltarAirlock, gibraltarBug, gibraltarHangar ]
-
-    array<entity> triggers = file.maltaTriggers
-    triggers.extend( file.gibraltarTriggers )
-
+    file.maltaTriggers = GetChildren( GetEntByScriptName( "malta_triggers_parent_node" ) )
     foreach( entity trigger in file.maltaTriggers )
+    {
+        file.take0GOnExit[ trigger ] <- maltaExits[ trigger.GetScriptName() ]
         thread TriggerCheck( trigger )
+    }
 
-    file.take0GOnExit[ maltaHangarLarge ] <- trigger_local_south_exit
-    file.take0GOnExit[ maltaHangarAngled ] <- malta_hangar_angled_exit
-    file.take0GOnExit[ maltaGunDeck03Front ] <- malta_gundeck03_front_exit
-    file.take0GOnExit[ maltaGunDeck03West ] <- malta_gundeck03_west_exit
-    file.take0GOnExit[ maltaGunDeck03East ] <- malta_gundeck03_east_exit
-    file.take0GOnExit[ maltaGunDeck03Closing ] <- malta_gundeck03_closing_exit
-    file.take0GOnExit[ maltaGunDeck03Connecting ] <- malta_gundeck03_connection_exit
-    file.take0GOnExit[ maltaGunDeck02Connecting ] <- malta_gundeck03_connection_exit
-    file.take0GOnExit[ maltaGunDeck02East ] <- malta_gundeck02_east_exit
-    file.take0GOnExit[ maltaGunDeck02Front ] <- malta_gundeck03_front_exit
-    file.take0GOnExit[ maltaGunDeck01Front ] <- malta_gundeck03_front_exit
-    file.take0GOnExit[ maltaGunDeck01East ] <- malta_gundeck01_east_exit
-    file.take0GOnExit[ maltaGunDeck01Conclusion ] <- trigger_local_west_exit
-    file.take0GOnExit[ maltaLifts ] <- malta_lifts_exit
-    file.take0GOnExit[ maltaGunDeck02Top ] <- malta_gundeck02_top_exit
-    file.take0GOnExit[ maltaGunDeck01EastFiller ] <- malta_gundeck01_east_filler_exit
-    file.take0GOnExit[ maltaGunDeck01EastFillerTop ] <- malta_gundeck01_east_exit
-    file.take0GOnExit[ maltaLowerDeckLong ] <- trigger_local_south_exit
-    file.take0GOnExit[ maltaLowerDeckEastAngle ] <- trigger_local_south_exit
-    file.take0GOnExit[ maltaLowerDeckWestAngle ] <- trigger_local_south_exit
-    file.take0GOnExit[ gibraltarHeck ] <- trigger_local_north_exit
-    file.take0GOnExit[ gibraltarAirlock ] <- trigger_local_north_exit
-    file.take0GOnExit[ gibraltarBug ] <- trigger_local_north_exit
-    file.take0GOnExit[ gibraltarHangar ] <- trigger_local_north_exit
+    file.gibraltarTriggers = GetChildren( GetEntByScriptName( "gibraltar_triggers_parent_node" ) )
+    foreach( entity trigger in file.gibraltarTriggers )
+    {
+        file.take0GOnExit[ trigger ] <- trigger_local_north_exit
+        thread TriggerCheck( trigger )
+    }
 
+    #if HAS_QUERSCHNITT
     if( GetConVarBool( "s2s_strip_debug" ) )
     {
-        thread DrawPersistentTriggers()
+        thread DrawPersistentTriggers( file.maltaTriggers )
+        thread DrawPersistentTriggers( file.gibraltarTriggers )
     }
+    #endif
 }
 
 void function TriggerCheck( entity trigger )
@@ -369,4 +344,18 @@ vector function LinePlaneCollision( vector planeNormal, vector planePoint, vecto
     vector w = rayPoint - planePoint
     float si = -planeNormal.Dot( w ) / ndotu
     return w + si * rayDirection + planePoint
+}
+
+array<entity> function GetChildren( entity p )
+{
+    array<entity> children
+	entity child = p.FirstMoveChild()
+
+	while ( child )
+	{
+        children.append( child)
+		child = child.NextMovePeer()
+	}
+
+    return children
 }
