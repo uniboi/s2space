@@ -232,13 +232,13 @@ bool function trigger_local_north_exit( entity trigger, entity activator )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
 
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
-    
     vector planeNormal = Normalize( CrossProduct( corners[0] - corners[1], corners[0] - corners[4] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[0], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     vector center_collision = center - collision
     vector center_origin = center - org
@@ -254,14 +254,14 @@ bool function trigger_local_south_exit( entity trigger, entity activator )
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
-
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
     
     vector planeNormal = Normalize( CrossProduct( corners[3] - corners[2], corners[3] - corners[7] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[3], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     float ccl = LengthSqr( center - collision )
     return ccl < LengthSqr( center - org ) && ccl < LengthSqr( center - corners[3] ) && LengthSqr( collision - org ) < ccl
@@ -272,14 +272,14 @@ bool function trigger_local_east_exit( entity trigger, entity activator )
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
-
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
     
     vector planeNormal = Normalize( CrossProduct( corners[2] - corners[1], corners[2] - corners[6] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[2], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     float ccl = LengthSqr( center - collision )
     return ccl < LengthSqr( center - org ) && ccl < LengthSqr( center - corners[2] ) && LengthSqr( collision - org ) < ccl
@@ -290,14 +290,14 @@ bool function trigger_local_west_exit( entity trigger, entity activator )
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
-
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
     
     vector planeNormal = Normalize( CrossProduct( corners[3] - corners[0], corners[3] - corners[7] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[2], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     float ccl = LengthSqr( center - collision )
     return ccl < LengthSqr( center - org ) && ccl < LengthSqr( center - corners[3] ) && LengthSqr( collision - org ) < ccl
@@ -308,14 +308,14 @@ bool function trigger_local_top_exit( entity trigger, entity activator )
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
-
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
     
     vector planeNormal = Normalize( CrossProduct( corners[4] - corners[5], corners[4] - corners[7] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[4], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     float ccl = LengthSqr( center - collision )
     return ccl < LengthSqr( center - org ) && ccl < LengthSqr( center - corners[4] ) && LengthSqr( collision - org ) < ccl}
@@ -325,14 +325,14 @@ bool function trigger_local_bottom_exit( entity trigger, entity activator )
     vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
     vector org = activator.GetOrigin()
     vector center = trigger.GetWorldSpaceCenter()
-
-    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
     
     vector planeNormal = Normalize( CrossProduct( corners[0] - corners[1], corners[0] - corners[3] ) )
     vector rayDirection = center - org
     vector collision = LinePlaneCollision( planeNormal, corners[0], rayDirection, center )
 
+    #if HAS_QUERSCHNITT
     DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+    #endif
 
     float ccl = LengthSqr( center - collision )
     return ccl < LengthSqr( center - org ) && ccl < LengthSqr( center - corners[0] ) && LengthSqr( collision - org ) < ccl
