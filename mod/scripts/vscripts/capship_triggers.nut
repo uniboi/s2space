@@ -276,7 +276,25 @@ bool function trigger_north_exit( entity trigger, entity activator )
 
 bool function trigger_local_north_exit( entity trigger, entity activator )
 {
-    return GetLocalFaceExitDirection( Normalize( trigger.GetWorldSpaceCenter() - activator.GetOrigin() ) ) == <1,0,0>
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    vector center = trigger.GetWorldSpaceCenter()
+
+    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
+    
+    vector planeNormal = Normalize( CrossProduct( corners[0] - corners[1], corners[0] - corners[4] ) )
+    vector rayDirection = center - org
+    vector collision = LinePlaneCollision( planeNormal, corners[0], rayDirection, center )
+
+    DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+
+    vector center_collision = center - collision
+    vector center_origin = center - org
+    vector center_corner0 = center - corners[0]
+    vector collision_origin = collision - org
+    float ccl = LengthSqr( center_collision )
+
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
 }
 
 bool function trigger_local_south_exit( entity trigger, entity activator )
@@ -302,14 +320,95 @@ bool function trigger_local_south_exit( entity trigger, entity activator )
     return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
 }
 
+bool function trigger_local_east_exit( entity trigger, entity activator )
+{
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    vector center = trigger.GetWorldSpaceCenter()
+
+    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
+    
+    vector planeNormal = Normalize( CrossProduct( corners[2] - corners[1], corners[2] - corners[6] ) )
+    vector rayDirection = center - org
+    vector collision = LinePlaneCollision( planeNormal, corners[2], rayDirection, center )
+
+    DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+
+    vector center_collision = center - collision
+    vector center_origin = center - org
+    vector center_corner0 = center - corners[2]
+    vector collision_origin = collision - org
+    float ccl = LengthSqr( center_collision )
+
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
+}
+
+bool function trigger_local_west_exit( entity trigger, entity activator )
+{
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    vector center = trigger.GetWorldSpaceCenter()
+
+    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
+    
+    vector planeNormal = Normalize( CrossProduct( corners[3] - corners[0], corners[3] - corners[7] ) )
+    vector rayDirection = center - org
+    vector collision = LinePlaneCollision( planeNormal, corners[2], rayDirection, center )
+
+    DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+
+    vector center_collision = center - collision
+    vector center_origin = center - org
+    vector center_corner0 = center - corners[3]
+    vector collision_origin = collision - org
+    float ccl = LengthSqr( center_collision )
+
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
+}
+
 bool function trigger_local_top_exit( entity trigger, entity activator )
 {
-    return GetLocalFaceExitDirection( Normalize( trigger.GetWorldSpaceCenter() - activator.GetOrigin() ) ) == <0,0,1>
-}
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    vector center = trigger.GetWorldSpaceCenter()
+
+    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
+    
+    vector planeNormal = Normalize( CrossProduct( corners[4] - corners[5], corners[4] - corners[7] ) )
+    vector rayDirection = center - org
+    vector collision = LinePlaneCollision( planeNormal, corners[4], rayDirection, center )
+
+    DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+
+    vector center_collision = center - collision
+    vector center_origin = center - org
+    vector center_corner0 = center - corners[4]
+    vector collision_origin = collision - org
+    float ccl = LengthSqr( center_collision )
+
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl}
 
 bool function trigger_local_bottom_exit( entity trigger, entity activator )
 {
-    return GetLocalFaceExitDirection( Normalize( trigger.GetWorldSpaceCenter() - activator.GetOrigin() ) ) == <0,0,-1>
+    vector[8] corners = GetAngledBoxCorners( trigger.GetOrigin(), trigger.GetBoundingMins(), trigger.GetBoundingMaxs(), trigger.GetAngles() )
+    vector org = activator.GetOrigin()
+    vector center = trigger.GetWorldSpaceCenter()
+
+    DrawGlobal( "line", trigger.GetWorldSpaceCenter(), activator.GetOrigin(), 255, 255, 255, true, 5.0 )
+    
+    vector planeNormal = Normalize( CrossProduct( corners[0] - corners[1], corners[0] - corners[3] ) )
+    vector rayDirection = center - org
+    vector collision = LinePlaneCollision( planeNormal, corners[0], rayDirection, center )
+
+    DrawGlobal( "circle", collision, trigger.GetAngles() - <0,90,90>, 20, 255, 255, 50, true, 5.0 )
+
+    vector center_collision = center - collision
+    vector center_origin = center - org
+    vector center_corner0 = center - corners[0]
+    vector collision_origin = collision - org
+    float ccl = LengthSqr( center_collision )
+
+    return ccl < LengthSqr( center_origin ) && ccl < LengthSqr( center_corner0 ) && LengthSqr( collision_origin ) < ccl
 }
 
 vector function GetLocalFaceExitDirection( vector exitNormal )
