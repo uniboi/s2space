@@ -76,6 +76,15 @@ void function SetupCapshipTriggers()
     entity maltaLowerDeckWestAngle = GetEntByScriptName( "maltaLowerDeckWestAngle" )
     file.maltaTriggers = [ maltaHangarLarge, maltaHangarAngled, maltaGunDeck03Front, maltaGunDeck03West, maltaGunDeck03East, maltaGunDeck03Closing, maltaGunDeck03Connecting, maltaGunDeck02Connecting, maltaGunDeck02East, maltaGunDeck02Front, maltaGunDeck01Front, maltaGunDeck01East, maltaGunDeck01Conclusion, /*maltaLiftsAngled,*/ maltaLifts, maltaGunDeck02Top, maltaGunDeck01EastFiller, maltaGunDeck01EastFillerTop, maltaLowerDeckLong, maltaLowerDeckEastAngle, maltaLowerDeckWestAngle ]
 
+    entity gibraltarHeck = GetEntByScriptName( "gibraltar_heck" )
+    entity gibraltarAirlock = GetEntByScriptName( "gibraltar_airlock" )
+    entity gibraltarBug = GetEntByScriptName( "gibraltar_bug" )
+    entity gibraltarHangar = GetEntByScriptName( "gibraltar_hangar" )
+    file.gibraltarTriggers = [ gibraltarHeck, gibraltarAirlock, gibraltarBug, gibraltarHangar ]
+
+    array<entity> triggers = file.maltaTriggers
+    triggers.extend( file.gibraltarTriggers )
+
     foreach( entity trigger in file.maltaTriggers )
         thread TriggerCheck( trigger )
 
@@ -99,6 +108,10 @@ void function SetupCapshipTriggers()
     file.take0GOnExit[ maltaLowerDeckLong ] <- trigger_local_south_exit
     file.take0GOnExit[ maltaLowerDeckEastAngle ] <- trigger_local_south_exit
     file.take0GOnExit[ maltaLowerDeckWestAngle ] <- trigger_local_south_exit
+    file.take0GOnExit[ gibraltarHeck ] <- trigger_local_north_exit
+    file.take0GOnExit[ gibraltarAirlock ] <- trigger_local_north_exit
+    file.take0GOnExit[ gibraltarBug ] <- trigger_local_north_exit
+    file.take0GOnExit[ gibraltarHangar ] <- trigger_local_north_exit
 
     if( GetConVarBool( "s2s_strip_debug" ) )
     {
