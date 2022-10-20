@@ -1,5 +1,5 @@
 {
-	"Name" : "Odd.mp_s2s_stripped",
+	"Name": "Odd.mp_s2s_stripped",
 	"Description": "MOSTLY self contained s2s mod. DOES NOT depend on cor's s2s. DOES DEPEND on cor's utilities",
 	"Version": "0.0.1",
 	"LoadPriority": 3,
@@ -8,12 +8,66 @@
 		"HAS_QUERSCHNITT": "Querschnitt"
 	},
 	"ConVars": [
-        {
-            "Name":"s2s_strip_debug",
-            "DefaultValue": "0"
-        }
+		{
+			"Name": "s2s_strip_debug",
+			"DefaultValue": "0"
+		}
 	],
 	"Scripts": [
+		{
+			"Path": "c2c/sp_weapon_viperbossrockets_s2s.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "SPWeaponViperBossRockets_S2S_Init"
+			}
+		},
+		{
+			"Path": "c2c/sp_weapon_mega_turret_s2s_ion.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "c2c/sp_s2s_common.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "S2S_CommonInit"
+			}
+		},
+		{
+			"Path": "c2c/sp_s2s_flight.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "S2S_FlightInit"
+			}
+		},
+		{
+			"Path": "c2c/mo_utility.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "MoUtilityInit"
+			}
+		},
+		{
+			"Path": "c2c/sp_s2s_widow.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "S2S_WidowInit"
+			}
+		},
+		{
+			"Path": "c2c/sp_s2s_fsm.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
+			"Path": "c2c/sp_s2s_dropship.nut",
+			"RunOn": "SERVER && MP",
+			"ServerCallback": {
+				"After": "S2S_DropshipInit"
+			}
+		},
+		{
+			"Path": "c2c/sp_s2s_capships.nut",
+			"RunOn": "SERVER && MP"
+		},
 		{
 			"Path": "lobby/sh_private_lobby_mp_s2s.gnut",
 			"RunOn": "( CLIENT || SERVER ) && MP",
@@ -69,8 +123,7 @@
 			}
 		}
 	],
-	"Localisation": 
-	[
+	"Localisation": [
 		"resource/mp_s2s_localisation_%language%.txt"
 	]
 }
