@@ -4,17 +4,24 @@ A mod for a mp version of s2s set in space that's based on mp_s2s by [cat or not
 
 ## Dependencies
 
-* [cat or not's utils](https://northstar.thunderstore.io/package/cat_or_not/cat_or_nots_utils/)
-
+As of now, this mod doesn't require any dependencies
 ## Removed Dependencies
 
 Dependencies that are needed for the original mp_s2s mod but not for this one.
+
+* [cat or not's utils](https://northstar.thunderstore.io/package/cat_or_not/cat_or_nots_utils/)
 
 * [maps plus](https://northstar.thunderstore.io/package/cat_or_not/maps_plus/)
 
 * [DrivableDropShip](https://northstar.thunderstore.io/package/cat_or_not/DrivableDropShip/)
 
+## Debug
+
+set the `s2s_strip_debug` convar to ``1`` and reload the map.
+
 ## Installation
+
+This section isn't required (or possible) if you downloaded the mod from thunderstore.
 
 ### Concat compressed files
 

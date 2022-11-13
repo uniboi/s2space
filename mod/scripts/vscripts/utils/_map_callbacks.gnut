@@ -1,0 +1,25 @@
+global function StartMapCallBacks
+global function AddCallBack_OnSpecificMapLoaded
+
+struct 
+{
+    table< string, array< void functionref() > > map_callbacks
+} file
+
+
+void function StartMapCallBacks()
+{
+    if ( !(GetMapName() in file.map_callbacks) )
+        return
+
+    foreach( void functionref() callback in file.map_callbacks[GetMapName()] )
+        callback()
+}
+
+void function AddCallBack_OnSpecificMapLoaded( string map, void functionref() callback )
+{
+    if ( map in file.map_callbacks )
+        file.map_callbacks[ map ].append( callback )
+    else
+        file.map_callbacks[ map ] <- [ callback ]
+}
