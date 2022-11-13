@@ -32,7 +32,6 @@ global function __ShipFollowShip
 global function __ShipIdleAtTarget
 global function __ShipIdleAtTarget_Method2
 global function __ShipFlyToPosInternal
-global function __ShipFlyToPosInternal_New // TODO: uhh
 global function __ShipIdleUnderTarget
 global function GetBestSideFromEvent
 global function GetBestEdgeData
@@ -393,64 +392,6 @@ void function __ShipFlyToPosInternal( ShipStruct ship, entity followTarget, Loca
 
 		WaitFrame()
 	}
-}
-
-void function __ShipFlyToPosInternal_New( ShipStruct ship, entity followTarget, LocalVec pos, vector offset, vector baseAngles )
-{
-	Signal( ship, "NewFlyStyle" )
-	EndSignal( ship, "NewFlyStyle" )
-	EndSignal( ship, "FakeDestroy" )
-
-	entity mover 	= ship.mover
-	mover.EndSignal( "OnDestroy" )
-
-	if ( mover.l.lastMoveToTime == Time() )
-		WaitFrame()
-
-	LocalVec goalVelocity = CLVec( <0,0,0> )
-	float rotDelay = ship.fullBankTime * 0.66
-	float timeStartMove = Time() + rotDelay - FRAME_INTERVAL
-	LocalVec goalPos = GetEaseOutGoalPos( ship, rotDelay )
-	LocalVec baseOrigin = pos
-
-	#if DEV
-			if ( DEV_DRAWMOVETOPOS && GetBugReproNum() == ship.bug_reproNum )
-			{
-				DebugDrawLine( mover.GetOrigin(), LocalToWorldOrigin( goalPos ), 153, 153, 255, true, rotDelay )
-				DebugDrawCircle( LocalToWorldOrigin( goalPos ), <0,90,0>, 8, 153, 153, 255, true, rotDelay, 3 )
-				DebugDrawLine( LocalToWorldOrigin( goalPos ), LocalToWorldOrigin( baseOrigin ), 153, 153, 255, true, rotDelay )
-				DebugDrawCircle( LocalToWorldOrigin( baseOrigin ), <0,0,0>, 8, 153, 153, 255, true, rotDelay, 4 )
-			}
-	#endif
-
-	while( 1 )
-	{
-		if ( followTarget != null )
-			baseOrigin = GetBaseOrigin_FollowTarget( followTarget, pos.v, offset, GetBugReproNum() == ship.bug_reproNum )
-
-		float currTime = Time()
-		if ( currTime >= timeStartMove )
-			goalPos = baseOrigin
-
-		ship.localVelocity.v = MoveToPosWithEase( ship, mover, goalPos, goalVelocity, ship.localVelocity, ship.accMax, ship.speedMax ).v
-
-		float timeScale = GetBankTimeScale( timeStartMove - currTime, rotDelay )
-		BankShip( ship, baseOrigin, mover, baseAngles, null, timeScale )
-
-		#if DEV
-			if ( DEV_DRAWMOVETOPOS && GetBugReproNum() == ship.bug_reproNum )
-			{
-				DebugDrawCircle( LocalToWorldOrigin( baseOrigin ), <0,0,0>, 4, 255, 100, 255, true, FRAME_INTERVAL, 4 )
-				DebugDrawLine( LocalToWorldOrigin( baseOrigin ), mover.GetOrigin(), 255, 100, 255, true, FRAME_INTERVAL )
-			}
-		#endif
-
-		if( goalPos.v == ship.mover.GetOrigin() )
-			break
-
-		WaitFrame()
-	}
-	printt("done")
 }
 
 float function GetBankTimeScale( float deltaTime, float rotDelay )

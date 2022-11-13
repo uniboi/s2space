@@ -450,6 +450,6 @@ int function ArrayPop( array<int> list )
 
 void function DoCustomBehavior( ShipStruct ship, void functionref( ShipStruct ) customFunc )
 {
-	ship.customBehaviorFunc = customFunc
-	__SetBehaviorInternal( ship, eBehavior.CUSTOM )
+	// ship.customBehaviorFunc = customFunc
+	// __SetBehaviorInternal( ship, eBehavior.CUSTOM )
 }

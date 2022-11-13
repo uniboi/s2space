@@ -13,6 +13,7 @@ void function InitMpS2s()
 	#else // CLIENT
 	#endif
 	AddCallback_OnRegisteringCustomNetworkVars( RegisterNetworkVars_s2s )
+	RegisterSignal( "MovingToNewPos" )
 }
 
 void function RegisterNetworkVars_s2s()
