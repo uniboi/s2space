@@ -28,9 +28,6 @@ global function CleanupScript
 global function DisableScript
 global function ShipGeoHide
 global function ShipGeoShow
-global function Ship_WorldToSkybox
-global function Ship_SkyboxToWorld
-global function Ship_SkyboxToWorldInstant
 
 global function GetBankMagnitudeCapShip
 global function GetBankMagnitudeMalta
@@ -1409,42 +1406,4 @@ void function ShipGeoShow( ShipStruct ship, string chunkName )
 	chunk.Solid()
 
 	anchor.Destroy()
-}
-
-void function Ship_WorldToSkybox( ShipStruct ship, entity skyboxModel )
-{
-	Assert( !IsValid( ship.skyboxModel ) )
-	ship.skyboxModel = skyboxModel
-
-	ship.model.Hide()
-
-	skyboxModel.SetParent( ship.mover, "REF", false, 0 )
-	skyboxModel.DisableHibernation()
-
-	entity skycam = GetEnt( "skybox_cam_level" )
-	ship.mover.l.skyboxOffset = skycam.GetOrigin()
-	ship.mover.l.skyboxScale = 0.001
-}
-
-void function Ship_SkyboxToWorldInstant( ShipStruct ship )
-{
-	Assert( IsValid( ship.skyboxModel ) )
-
-	vector origin = ship.skyboxModel.GetOrigin()
-	vector delta = ( origin - ship.mover.l.skyboxOffset ) * 1000
-	ship.mover.NonPhysicsStop()
-	ship.mover.SetOrigin( delta )
-
-	Ship_SkyboxToWorld( ship )
-}
-
-void function Ship_SkyboxToWorld( ShipStruct ship )
-{
-	Assert( IsValid( ship.skyboxModel ) )
-	ship.skyboxModel.Destroy()
-
-	ship.model.Show()
-
-	ship.mover.l.skyboxOffset = <0,0,0>
-	ship.mover.l.skyboxScale = 1.0
 }

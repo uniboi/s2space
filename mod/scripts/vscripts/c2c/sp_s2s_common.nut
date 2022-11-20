@@ -308,7 +308,6 @@ global struct ShipStruct
 	array<entity> leftEdge
 	array<entity> rightEdge
 	table<string, array<LiftStruct> > lifts
-	entity skyboxModel
 }
 
 global struct EdgeData
