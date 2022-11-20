@@ -580,12 +580,6 @@ struct MyFile
 	entity sarahTitan
 	entity viper
 
-	//airbattle
-	entity airBattleNode
-	var airBattleData // should be AirBattleStruct&
-	table<int,entity> rocketDummy
-	table<int,array<ShipStruct> > dropships
-
 	//misc
 	entity sculptor
 	entity objBridgePanel
