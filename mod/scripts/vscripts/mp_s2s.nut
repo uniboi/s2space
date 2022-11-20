@@ -20,7 +20,6 @@ const asset MODEL_VIPER_HATCH = $"models/props/titan_northstar_hatch/titan_north
 const asset MODEL_VIPER_PILOT = $"models/humans/heroes/imc_hero_viper.mdl"
 const asset MODEL_BT_ARM	= $"models/props/bt_left_arm/bt_left_arm_animated.mdl"
 
-const asset PLAYER_WIND_FX 	= $"P_wind_cruising"
 const asset BOSS_TITAN_DEATH_FX	= $"P_s2s_viper_death_fire"
 const asset BOSS_TITAN_EXP_FX	= $"xo_exp_death_s2s"
 const asset ION_BALL 		= $"P_ion_moving_proj"
@@ -111,26 +110,7 @@ file
 void function MpS2s()
 {
 	PrecacheModel( MILITIA_DECOY_SHIP_MODEL )
-	PrecacheModel( SE_LAND_A )
-	PrecacheModel( SE_LAND_B )
-	PrecacheModel( SE_LAND_AB )
-	PrecacheModel( SE_LAND_BA )
-	PrecacheModel( SE_VISTA_A1 )
-	PrecacheModel( SE_VISTA_A2 )
-	PrecacheModel( SE_VISTA_A3 )
-	PrecacheModel( SE_VISTA_A4 )
-	PrecacheModel( SE_VISTA_B1 )
-	PrecacheModel( SE_VISTA_B2 )
-	PrecacheModel( SE_VISTA_B3 )
-	PrecacheModel( SE_VISTA_B4 )
-	PrecacheModel( SE_CLOUDS_A )
-	PrecacheModel( SE_CLOUDS_B )
-	PrecacheModel( SE_CLOUDS_C )
-	PrecacheModel( SE_SPIRE )
-	PrecacheModel( $"models/props/global_access_panel_button/global_access_panel_button_console.mdl" )
-	PrecacheModel( $"models/signs/flag_base_pole_ctf.mdl" )
 	
-	PrecacheParticleSystem( PLAYER_WIND_FX )
 	PrecacheParticleSystem( FX_DECOY_SHIP_DESTRUCTION )
 	PrecacheParticleSystem( CANNON_FX )
 	PrecacheParticleSystem( CANNON_IMPACT )
@@ -138,11 +118,6 @@ void function MpS2s()
 
 	PrecacheWeapon( "sp_weapon_swarm_rockets_s2s" )
 
-	FlagInit( "StopWindFx" )
-	FlagInit( "StopDynamicSky" )
-	FlagInit( "MaltaDeckClear" )
-
-	RegisterSignal( "landpop" )
 	RegisterSignal( "MaltaSideGunAimAtThink" )
 
 	ClassicMP_SetLevelIntro( ClassicMP_DefaultNoIntro_Setup, ClassicMP_DefaultNoIntro_GetLength() )
@@ -155,8 +130,6 @@ void function MpS2s()
 
 void function EntitiesDidLoadFaster()
 {
-	SetupDropshipsSpawnsOnGibraltar()
-	SetupDropshipsSpawnsOnMalta()
 	SetupSpawnpoints()
 	AddCallback_OnPlayerRespawned( PlayerRespawnedOnS2s )
 

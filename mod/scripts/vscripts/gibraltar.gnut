@@ -9,18 +9,3 @@ void function SetupGibraltarSpawns()
 {
 
 }
-
-void function WarpInWidowsForGibraltar()
-{
-
-}
-
-void function SetupDropshipsSpawnsOnGibraltar()
-{
-
-}
-
-void function SpawnDrivableDropShipGibraltar( entity button, entity player )
-{
-
-}

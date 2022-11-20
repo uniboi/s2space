@@ -83,23 +83,3 @@ void function SetupMaltaSpawns()
 		// malta.LinkToEnt( spawnpoint_start )
 	}
 }
-
-void function WarpInWidowsForMalta()
-{
-
-}
-
-void function SpawnZiplineMalta()
-{
-
-}
-
-void function SetupDropshipsSpawnsOnMalta()
-{
-
-}
-
-void function SpawnDrivableDropShipMalta( entity button, entity player )
-{
-
-}
