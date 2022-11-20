@@ -15,6 +15,10 @@
 	],
 	"Scripts": [
 		{
+			"Path": "s2s_intro.nut",
+			"RunOn": "SERVER && MP"
+		},
+		{
 			"Path": "utils/_map_callbacks.gnut",
 			"RunOn": "SERVER",
 			"ServerCallback": {

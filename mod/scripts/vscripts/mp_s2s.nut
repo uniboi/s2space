@@ -4,6 +4,8 @@ global function GetGibraltar
 global function GetTrinity
 global function GetOLA
 
+global function PlayDecoyShipIntro
+
 const asset MILITIA_DECOY_SHIP_MODEL 	= $"models/vehicles_r2/spacecraft/trinity/s2s_trinity_destroyed.mdl"
 
 const asset FX_DECOY_SHIP_DESTRUCTION 	= $"P_exp_trin_death"
@@ -125,7 +127,7 @@ void function MpS2s()
 
 	RegisterSignal( "MaltaSideGunAimAtThink" )
 
-	ClassicMP_SetLevelIntro( ClassicMP_DefaultNoIntro_Setup, ClassicMP_DefaultNoIntro_GetLength() )
+	ClassicMP_SetLevelIntro( ClassicMP_s2space_Setup, S2SPACE_INTRO_LENGTH )
 	
 	// AddCallback_EntitiesDidLoad( EntitiesDidLoadFaster )
     S2S_CapShipsInit()
@@ -244,22 +246,23 @@ void function FinalSetup()
 
 	GetEntByScriptName( "MaltaSideClip" ).Solid() //the boss missiles should be passed by now
 	GetEntByScriptName( "MaltaSideClip" ).kv.CollisionGroup = TRACE_COLLISION_GROUP_BLOCK_WEAPONS//this it shootable but not have phys collision
+	
+	WaitSignal( file.malta, "Goal" )
+}
 
-	ShipStruct trinity = file.trinity
-	entity mover = trinity.mover
-	entity model = trinity.model
-
+void function PlayDecoyShipIntro()
+{
 	entity decoyShip = CreateEntity( "script_mover" )
 	decoyShip.kv.solid = 0
 	decoyShip.SetModel( MILITIA_DECOY_SHIP_MODEL )
 	decoyShip.kv.SpawnAsPhysicsMover = 0
 	DispatchSpawn( decoyShip )
 
-	decoyShip.SetOrigin( model.GetOrigin() )
-	decoyShip.SetAngles( model.GetAngles() )
-	LocalVec startOrigin = WorldToLocalOrigin( model.GetOrigin() )
+	decoyShip.SetOrigin( file.trinity.mover.GetOrigin() )
+	decoyShip.SetAngles( file.trinity.mover.GetAngles() )
+	LocalVec startOrigin = WorldToLocalOrigin( file.trinity.mover.GetOrigin() )
 
-	Ship_CleanDelete( trinity )
+	Ship_CleanDelete( file.trinity )
 	SetOriginLocal( decoyShip, startOrigin )
 
 	vector fwd = decoyShip.GetForwardVector()
@@ -286,8 +289,6 @@ void function FinalSetup()
 
 	if ( IsValid( decoyShip ) )
 		decoyShip.Destroy()
-	
-	WaitSignal( file.malta, "Goal" )
 }
 
 
