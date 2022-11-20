@@ -34,6 +34,10 @@ void function DrawPersistentTriggers( array<entity> triggers )
 
 void function CapshipTriggersInit()
 {
+	if( GetMapName() != "mp_s2s" )
+	{
+		return
+	}
     // AddCallBack_OnSpecificMapLoaded( "mp_s2s", SetupCapshipTriggers )
     AddCallback_GameStateEnter( eGameState.Playing, SetupCapshipTriggers )
     AddCallback_OnClientConnecting( PlayerConnectRegister )

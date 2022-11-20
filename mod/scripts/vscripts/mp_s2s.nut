@@ -109,6 +109,11 @@ file
 
 void function MpS2s()
 {
+	if( GetMapName() != "mp_s2s" )
+	{
+		return
+	}
+
 	PrecacheModel( MILITIA_DECOY_SHIP_MODEL )
 	
 	PrecacheParticleSystem( FX_DECOY_SHIP_DESTRUCTION )
