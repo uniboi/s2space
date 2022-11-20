@@ -330,11 +330,13 @@ void function FinalSetup()
 
 	LocalVec origin1 = GetOriginLocal( file.malta.mover )
 	origin1.v -= <2000,0,-2000>
-	thread ShipFlyToPos( file.malta, origin1 )
+	// thread ShipFlyToPos( file.malta, origin1 )
+	thread IdleCapshipMovement( file.malta )
 
 	LocalVec origin2 = GetOriginLocal( file.gibraltar.mover )
 	origin2.v += <2000,0,2000>
-	thread ShipFlyToPos( file.gibraltar, origin2 )
+	// ShipFlyToPos( file.gibraltar, origin2 )
+	thread IdleCapshipMovement( file.gibraltar )
 
 	DoCustomBehavior( file.malta, Custom_IdleAtTarget )
 	
