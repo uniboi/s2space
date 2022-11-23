@@ -2,7 +2,7 @@ untyped
 
 global function ClassicMP_s2space_Setup
 
-global const float S2SPACE_INTRO_LENGTH = 10.0
+global const float S2SPACE_INTRO_LENGTH = 12.0
 
 void function ClassicMP_s2space_Setup()
 {
