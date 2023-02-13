@@ -1,6 +1,6 @@
 # s2space
 
-A mod for a mp version of s2s set in space that's based on mp_s2s by [cat or not](https://github.com/catornot).
+A tech test for a mp version of s2s set in space that's based on mp_s2s by [cat or not](https://github.com/catornot).
 
 ## Dependencies
 

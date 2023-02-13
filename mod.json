@@ -1,7 +1,7 @@
 {
 	"Name": "Odd.s2space",
 	"Description": "Self contained s2s mod. DOES NOT depend on cor's s2s or cor's utilities.",
-	"Version": "0.0.1",
+	"Version": "0.0.3",
 	"LoadPriority": 3,
 	"RequiredOnClient": true,
 	"Dependencies": {
