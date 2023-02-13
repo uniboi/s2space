@@ -10,11 +10,6 @@ on:
         default: ''
         type: string
         required: true
-      dev:
-        description: 'push to dev'
-        default: true
-        type: boolean
-        required: true
 
 env:
   name: ${{github.event.repository.name}} # Edit this if the package name differs from the repo name
@@ -72,4 +67,3 @@ jobs:
           token: ${{ secrets.TS_KEY }} 
           # Directory to wrap the contents of the repo in
           wrap: mods/${{ github.repository_owner }}.${{ env.name }} # This will wrap your Author.ModName folder in a mods/ folder before publishing
-          dev: ${{ github.event_name == 'workflow_dispatch' && inputs.dev }}
