@@ -1,6 +1,5 @@
 #big files
-vpk/_ar/
-vpk/client_mp_s2s.bsp.pak000_000.vpk
-vpk/englishclient_mp_s2s.bsp.pak000_dir.vpk
+vpk/*
+!vpk/vpk.json
 mod/maps/mp_s2s.bsp
 paks/logs/*
